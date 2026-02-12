@@ -3,9 +3,215 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>¿Quieres ser mi San Valentín?</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ti</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Outfit:wght@300;400;600&display=swap');
+
+        :root {
+            --primary-color: #ff4d6d;
+            --secondary-color: #ff8fa3;
+            --bg-color: #fff0f3;
+            --envelope-bg: #fff;
+            --envelope-shadow: 0 10px 30px rgba(255, 77, 109, 0.2);
+            --transition-speed: 0.8s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            height: 100vh;
+            overflow: hidden;
+            /* Prevent scrolling during intro */
+        }
+
+        /* INTRO SCREEN STYLES */
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #fff0f3 0%, #ffccd5 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity var(--transition-speed) ease-in-out, transform var(--transition-speed) ease-in-out;
+        }
+
+        .envelope-container {
+            position: relative;
+            cursor: pointer;
+            width: 300px;
+            height: 200px;
+            perspective: 1000px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .envelope {
+            width: 100%;
+            height: 100%;
+            background-color: var(--envelope-bg);
+            border-radius: 10px;
+            box-shadow: var(--envelope-shadow);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            /* Hide the flap overflow */
+        }
+
+        /* Envelope styling to look more real */
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 150px 100px 150px;
+            /* Top part */
+            border-color: transparent transparent #ffeef2 transparent;
+            z-index: 1;
+            transform-origin: top;
+            transition: transform 0.5s;
+        }
+
+        .envelope::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 150px 120px 150px;
+            border-color: transparent transparent #fff5f7 transparent;
+            /* Bottom part slightly darker */
+            transform: rotate(180deg);
+        }
+
+        /* The "flap" of the envelope - simulated with borders */
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 100px 150px 0 150px;
+            border-color: #ffdae2 transparent transparent transparent;
+            z-index: 3;
+            transform-origin: top;
+            transition: transform 0.6s 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .heart-seal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            color: var(--primary-color);
+            font-size: 3rem;
+            z-index: 4;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            15% {
+                transform: translate(-50%, -50%) scale(1.15);
+            }
+
+            30% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            45% {
+                transform: translate(-50%, -50%) scale(1.15);
+            }
+
+            60% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .click-hint {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Dancing Script', cursive;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            opacity: 0.8;
+            white-space: nowrap;
+        }
+
+        /* Interaction States */
+        #intro-screen.open .flap {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        #intro-screen.open .heart-seal {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        #intro-screen.fade-out {
+            opacity: 0;
+            transform: scale(1.1);
+            pointer-events: none;
+        }
+
+        /* MAIN CONTENT PLACEHOLDER */
+        #main-content {
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            height: 100%;
+            overflow-y: auto;
+            /* Placeholder styling */
+            display: flex;
+            flex-direction: column;
+            /* Stack children vertically */
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #main-content.visible {
+            opacity: 1;
+        }
+
         :root {
             --primary-pink: #ff4d6d;
             --soft-pink: #ff9a9e;
@@ -153,160 +359,196 @@
 
 <body>
 
-    <h1>¿Queres ser mi San Valentín? 💘</h1>
-
-    <div id="content-area">
-        <div id="image-container">
-            <img id="main-image" src="kyp.jpg" alt="Valentín">
-        </div>
-        <div id="phrase-container">
-            <div id="phrase"></div>
+    <!-- Intro Screen -->
+    <div id="intro-screen">
+        <div class="envelope-container" onclick="openLetter()">
+            <div class="envelope">
+                <div class="flap"></div>
+                <div class="heart-seal">❤</div>
+            </div>
+            <div class="click-hint">Toca para abrir</div>
         </div>
     </div>
 
-    <div id="controls">
-        <button id="yesBtn" class="btn">Sí ❤️</button>
-        <button id="noBtn" class="btn">No 😢</button>
-    </div>
+    <!-- Main Content (Paste your code inside this div) -->
+    <div id="main-content">
+        <h1>¿Queres ser mi San Valentín? 💘</h1>
 
-    <script>
-        const yesBtn = document.getElementById("yesBtn");
-        const noBtn = document.getElementById("noBtn");
-        const phrase = document.getElementById("phrase");
-        const mainImage = document.getElementById("main-image");
-        const controls = document.getElementById("controls");
+        <div id="content-area">
+            <div id="image-container">
+                <img id="main-image" src="kyp.jpg" alt="Valentín">
+            </div>
+            <div id="phrase-container">
+                <div id="phrase"></div>
+            </div>
+        </div>
 
-        let size = 1;
-        let noClicks = 0;
+        <div id="controls">
+            <button id="yesBtn" class="btn">Sí ❤️</button>
+            <button id="noBtn" class="btn">No 😢</button>
+        </div>
 
-        const phrases = [
-            "No seas mala 😭",
-            "Dale, veniiiii💔",
-            "Quien me va a cuidarrrrrr 😔",
-            "Te prometo no te hago nadaaaaaaa 🥺",
-            "Por favor, te lo pido 🙏"
-        ];
+        <script>
+            const yesBtn = document.getElementById("yesBtn");
+            const noBtn = document.getElementById("noBtn");
+            const phrase = document.getElementById("phrase");
+            const mainImage = document.getElementById("main-image");
+            const controls = document.getElementById("controls");
 
-        // Usando la imagen local proporcionada
-        const images = [
-            "1.jpg",
-            "2.jpg",
-            "3.jpg",
-            "4.jpeg",
-            "5.jpg"
-        ];
+            let size = 1;
+            let noClicks = 0;
 
-        function getRandomPosition() {
-            const containerWidth = controls.clientWidth;
-            const containerHeight = controls.clientHeight;
-            // Use actual button dimensions or defaults
-            const btnWidth = noBtn.offsetWidth || 85;
-            const btnHeight = noBtn.offsetHeight || 45;
+            const phrases = [
+                "No seas mala 😭",
+                "Dale, veniiiii💔",
+                "Quien me va a cuidarrrrrr 😔",
+                "Te prometo no te hago nadaaaaaaa 🥺",
+                "Por favor, te lo pido 🙏"
+            ];
 
-            // Padding to keep away from edges
-            const padding = 10;
-            const maxX = containerWidth - btnWidth - padding;
-            const maxY = containerHeight - btnHeight - padding;
+            // Usando la imagen local proporcionada
+            const images = [
+                "1.jpg",
+                "2.jpg",
+                "3.jpg",
+                "4.jpeg",
+                "5.jpg"
+            ];
 
-            const randomX = Math.max(padding, Math.random() * maxX);
-            const randomY = Math.max(padding, Math.random() * maxY);
+            function getRandomPosition() {
+                const containerWidth = controls.clientWidth;
+                const containerHeight = controls.clientHeight;
+                // Use actual button dimensions or defaults
+                const btnWidth = noBtn.offsetWidth || 85;
+                const btnHeight = noBtn.offsetHeight || 45;
 
-            return { x: randomX, y: randomY };
-        }
+                // Padding to keep away from edges
+                const padding = 10;
+                const maxX = containerWidth - btnWidth - padding;
+                const maxY = containerHeight - btnHeight - padding;
 
-        function moveButton() {
-            let pos;
-            let attempts = 0;
-            const noWidth = noBtn.offsetWidth || 85;
-            const noHeight = noBtn.offsetHeight || 45;
+                const randomX = Math.max(padding, Math.random() * maxX);
+                const randomY = Math.max(padding, Math.random() * maxY);
 
-            const yesRect = yesBtn.getBoundingClientRect();
-            const ctrlRect = controls.getBoundingClientRect();
-
-            do {
-                pos = getRandomPosition();
-                // Check relative position overlapping with yesBtn
-                // yesBtn is usually centered (left: ~50%, top: ~50%)
-                const candX = pos.x;
-                const candY = pos.y;
-
-                // Get yesBtn bounds relative to controls container
-                const yesLeft = yesRect.left - ctrlRect.left;
-                const yesTop = yesRect.top - ctrlRect.top;
-                const yesRight = yesLeft + yesRect.width;
-                const yesBottom = yesTop + yesRect.height;
-
-                const overlap = !(
-                    candX + noWidth < yesLeft - 10 ||
-                    candX > yesRight + 10 ||
-                    candY + noHeight < yesTop - 10 ||
-                    candY > yesBottom + 10
-                );
-
-                if (!overlap || attempts >= 50) break;
-                attempts++;
-            } while (true);
-
-            noBtn.style.left = pos.x + "px";
-            noBtn.style.top = pos.y + "px";
-        }
-
-        // Initialize position
-        setTimeout(moveButton, 100);
-
-        const handleNoAction = () => {
-            if (noClicks < 5) {
-                phrase.textContent = phrases[noClicks];
-                mainImage.src = images[noClicks];
-                noClicks++;
-
-                // Reduced scale increment from 0.7 to 0.4 for mobile
-                size += 0.7;
-                yesBtn.style.transform = `scale(${size})`;
-                moveButton();
-            } else if (noClicks === 5) {
-                setTimeout(() => {
-                    noBtn.style.display = "none";
-                    phrase.textContent = "Bueno… ya está, solo queda el Sí 😎❤️";
-                    mainImage.src = "70d976d5b2aa41d5b6fbcb4575b8c2a8.jpg";
-
-                    Object.assign(yesBtn.style, {
-                        position: 'fixed',
-                        top: '0',
-                        left: '0',
-                        width: '100vw',
-                        height: '100vh',
-                        margin: '0',
-                        transform: 'none',
-                        borderRadius: '0',
-                        fontSize: '3rem',
-                        zIndex: '1000',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    });
-                }, 300);
+                return { x: randomX, y: randomY };
             }
-        };
 
-        noBtn.addEventListener("click", (e) => {
-            handleNoAction();
-        });
+            function moveButton() {
+                let pos;
+                let attempts = 0;
+                const noWidth = noBtn.offsetWidth || 85;
+                const noHeight = noBtn.offsetHeight || 45;
 
-        yesBtn.addEventListener("click", () => {
-            document.body.style.padding = "0";
-            document.body.innerHTML = `
+                const yesRect = yesBtn.getBoundingClientRect();
+                const ctrlRect = controls.getBoundingClientRect();
+
+                do {
+                    pos = getRandomPosition();
+                    // Check relative position overlapping with yesBtn
+                    // yesBtn is usually centered (left: ~50%, top: ~50%)
+                    const candX = pos.x;
+                    const candY = pos.y;
+
+                    // Get yesBtn bounds relative to controls container
+                    const yesLeft = yesRect.left - ctrlRect.left;
+                    const yesTop = yesRect.top - ctrlRect.top;
+                    const yesRight = yesLeft + yesRect.width;
+                    const yesBottom = yesTop + yesRect.height;
+
+                    const overlap = !(
+                        candX + noWidth < yesLeft - 10 ||
+                        candX > yesRight + 10 ||
+                        candY + noHeight < yesTop - 10 ||
+                        candY > yesBottom + 10
+                    );
+
+                    if (!overlap || attempts >= 50) break;
+                    attempts++;
+                } while (true);
+
+                noBtn.style.left = pos.x + "px";
+                noBtn.style.top = pos.y + "px";
+            }
+
+            // Initialize position
+            setTimeout(moveButton, 100);
+
+            const handleNoAction = () => {
+                if (noClicks < 5) {
+                    phrase.textContent = phrases[noClicks];
+                    mainImage.src = images[noClicks];
+                    noClicks++;
+
+                    // Reduced scale increment from 0.7 to 0.4 for mobile
+                    size += 0.7;
+                    yesBtn.style.transform = `scale(${size})`;
+                    moveButton();
+                } else if (noClicks === 5) {
+                    setTimeout(() => {
+                        noBtn.style.display = "none";
+                        phrase.textContent = "Bueno… ya está, solo queda el Sí 😎❤️";
+                        mainImage.src = "70d976d5b2aa41d5b6fbcb4575b8c2a8.jpg";
+
+                        Object.assign(yesBtn.style, {
+                            position: 'fixed',
+                            top: '0',
+                            left: '0',
+                            width: '100vw',
+                            height: '100vh',
+                            margin: '0',
+                            transform: 'none',
+                            borderRadius: '0',
+                            fontSize: '3rem',
+                            zIndex: '1000',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        });
+                    }, 300);
+                }
+            };
+
+            noBtn.addEventListener("click", (e) => {
+                handleNoAction();
+            });
+
+            yesBtn.addEventListener("click", () => {
+                document.body.style.padding = "0";
+                document.body.innerHTML = `
                 <div class="celebration" style="width: 100vw; height: 100vh;">
                     <h1 style="font-size: 2rem; margin-bottom: 20px;">Sabia que Siiiiiiiiiiiii❤️</h1>
                     <img src="fin.jpg" style="border-radius: 40px; width: 80vw; max-width: 320px; aspect-ratio: 1/1; object-fit: cover; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
                     <div style="font-size: 4rem; margin-top: 15px;">🥰</div>
                 </div>
             `;
-            document.body.style.background = "linear-gradient(135deg, #ff4d6d, #ff758c)";
-        });
-    </script>
+                document.body.style.background = "linear-gradient(135deg, #ff4d6d, #ff758c)";
+            });
+        </script>
+    </div>
 
+    <script>
+        function openLetter() {
+            const screen = document.getElementById('intro-screen');
+            const main = document.getElementById('main-content');
+
+            // 1. Animate the flap opening
+            screen.classList.add('open');
+
+            // 2. Wait for flap animation then fade out the whole screen
+            setTimeout(() => {
+                screen.classList.add('fade-out');
+
+                // 3. Show main content and enable scrolling
+                main.classList.add('visible');
+                document.body.style.overflow = 'auto';
+
+                // 4. Ideally remove the intro from DOM after transition for performance
+                setTimeout(() => {
+                    screen.style.display = 'none';
+                }, 800); // Matches CSS transition speed
+            }, 600);
+        }
+    </script>
 </body>
 
 </html>
-
