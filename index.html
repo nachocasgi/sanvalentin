@@ -9,11 +9,14 @@
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Outfit:wght@300;400;600&display=swap');
 
         :root {
-            --primary-color: #ff4d6d;
-            --secondary-color: #ff8fa3;
-            --bg-color: #fff0f3;
+            --primary-color: #800020;
+
+            --secondary-color: #b71c1c;
+
+            --bg-color: #fff5f5;
             --envelope-bg: #fff;
-            --envelope-shadow: 0 10px 30px rgba(255, 77, 109, 0.2);
+            --envelope-shadow: 0 10px 30px rgba(128, 0, 32, 0.3);
+
             --transition-speed: 0.8s;
         }
 
@@ -28,17 +31,17 @@
             background-color: var(--bg-color);
             height: 100vh;
             overflow: hidden;
-            /* Prevent scrolling during intro */
+
         }
 
-        /* INTRO SCREEN STYLES */
+
         #intro-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #fff0f3 0%, #ffccd5 100%);
+            background: linear-gradient(135deg, #56000e 0%, #800020 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -80,10 +83,10 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            /* Hide the flap overflow */
+
         }
 
-        /* Envelope styling to look more real */
+
         .envelope::before {
             content: '';
             position: absolute;
@@ -93,8 +96,9 @@
             height: 0;
             border-style: solid;
             border-width: 0 150px 100px 150px;
-            /* Top part */
-            border-color: transparent transparent #ffeef2 transparent;
+
+            border-color: transparent transparent #f7f7f7 transparent;
+
             z-index: 1;
             transform-origin: top;
             transition: transform 0.5s;
@@ -109,12 +113,11 @@
             height: 0;
             border-style: solid;
             border-width: 0 150px 120px 150px;
-            border-color: transparent transparent #fff5f7 transparent;
-            /* Bottom part slightly darker */
+            border-color: transparent transparent #f0f0f0 transparent;
             transform: rotate(180deg);
         }
 
-        /* The "flap" of the envelope - simulated with borders */
+
         .flap {
             position: absolute;
             top: 0;
@@ -123,7 +126,8 @@
             height: 0;
             border-style: solid;
             border-width: 100px 150px 0 150px;
-            border-color: #ffdae2 transparent transparent transparent;
+            border-color: #e0e0e0 transparent transparent transparent;
+
             z-index: 3;
             transform-origin: top;
             transition: transform 0.6s 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -169,13 +173,14 @@
             left: 50%;
             transform: translateX(-50%);
             font-family: 'Dancing Script', cursive;
-            color: var(--primary-color);
+            color: #ffffff;
             font-size: 1.5rem;
-            opacity: 0.8;
+            opacity: 0.9;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
             white-space: nowrap;
         }
 
-        /* Interaction States */
+
         #intro-screen.open .flap {
             transform: rotateX(180deg);
             z-index: 0;
@@ -192,16 +197,16 @@
             pointer-events: none;
         }
 
-        /* MAIN CONTENT PLACEHOLDER */
+
         #main-content {
             opacity: 0;
             transition: opacity 1s ease-in-out;
             height: 100%;
             overflow-y: auto;
-            /* Placeholder styling */
+
             display: flex;
             flex-direction: column;
-            /* Stack children vertically */
+
             justify-content: center;
             align-items: center;
             text-align: center;
@@ -213,9 +218,12 @@
         }
 
         :root {
-            --primary-pink: #ff4d6d;
-            --soft-pink: #ff9a9e;
-            --peach: #fad0c4;
+            --primary-pink: #800020;
+
+            --soft-pink: #b71c1c;
+            /* Red */
+            --peach: #ef5350;
+
         }
 
         body {
@@ -230,7 +238,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-around;
-            /* Better distribution */
+
             box-sizing: border-box;
             padding: 20px;
         }
@@ -238,7 +246,7 @@
         h1 {
             color: white;
             font-size: 1.5rem;
-            /* Slightly smaller for mobile */
+
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
             margin: 0;
             z-index: 10;
@@ -256,7 +264,7 @@
 
         #image-container {
             width: 250px;
-            /* Reduced from 350px */
+
             height: 250px;
             /* Reduced from 350px */
             background-color: white;
@@ -276,7 +284,7 @@
 
         #phrase-container {
             height: 60px;
-            /* Reduced */
+
             display: flex;
             align-items: center;
             justify-content: center;
@@ -285,7 +293,7 @@
 
         #phrase {
             font-size: 1.3rem;
-            /* Slightly smaller */
+
             color: white;
             font-weight: bold;
             text-align: center;
@@ -297,7 +305,7 @@
             position: relative;
             width: 100%;
             height: 200px;
-            /* Reduced from 300px to keep it tighter */
+
             display: flex;
             align-items: center;
             justify-content: center;
@@ -329,7 +337,7 @@
             position: absolute;
         }
 
-        /* Final Screen Styles */
+
         .celebration {
             display: flex;
             flex-direction: column;
@@ -359,18 +367,18 @@
 
 <body>
 
-    <!-- Intro Screen -->
+
     <div id="intro-screen">
         <div class="envelope-container" onclick="openLetter()">
             <div class="envelope">
                 <div class="flap"></div>
-                <div class="heart-seal">❤</div>
+                <div class="heart-seal">🌹</div>
             </div>
             <div class="click-hint">Toca para abrir</div>
         </div>
     </div>
 
-    <!-- Main Content (Paste your code inside this div) -->
+
     <div id="main-content">
         <h1>¿Queres ser mi San Valentín? 💘</h1>
 
@@ -406,7 +414,7 @@
                 "Por favor, te lo pido 🙏"
             ];
 
-            // Usando la imagen local proporcionada
+
             const images = [
                 "1.jpg",
                 "2.jpg",
@@ -418,11 +426,11 @@
             function getRandomPosition() {
                 const containerWidth = controls.clientWidth;
                 const containerHeight = controls.clientHeight;
-                // Use actual button dimensions or defaults
+
                 const btnWidth = noBtn.offsetWidth || 85;
                 const btnHeight = noBtn.offsetHeight || 45;
 
-                // Padding to keep away from edges
+
                 const padding = 10;
                 const maxX = containerWidth - btnWidth - padding;
                 const maxY = containerHeight - btnHeight - padding;
@@ -444,12 +452,12 @@
 
                 do {
                     pos = getRandomPosition();
-                    // Check relative position overlapping with yesBtn
-                    // yesBtn is usually centered (left: ~50%, top: ~50%)
+
+
                     const candX = pos.x;
                     const candY = pos.y;
 
-                    // Get yesBtn bounds relative to controls container
+
                     const yesLeft = yesRect.left - ctrlRect.left;
                     const yesTop = yesRect.top - ctrlRect.top;
                     const yesRight = yesLeft + yesRect.width;
@@ -470,7 +478,7 @@
                 noBtn.style.top = pos.y + "px";
             }
 
-            // Initialize position
+
             setTimeout(moveButton, 100);
 
             const handleNoAction = () => {
@@ -479,7 +487,7 @@
                     mainImage.src = images[noClicks];
                     noClicks++;
 
-                    // Reduced scale increment from 0.7 to 0.4 for mobile
+
                     size += 0.7;
                     yesBtn.style.transform = `scale(${size})`;
                     moveButton();
@@ -521,7 +529,7 @@
                     <div style="font-size: 4rem; margin-top: 15px;">🥰</div>
                 </div>
             `;
-                document.body.style.background = "linear-gradient(135deg, #ff4d6d, #ff758c)";
+                document.body.style.background = "linear-gradient(135deg, #800020, #b71c1c)";
             });
         </script>
     </div>
@@ -531,21 +539,21 @@
             const screen = document.getElementById('intro-screen');
             const main = document.getElementById('main-content');
 
-            // 1. Animate the flap opening
+
             screen.classList.add('open');
 
-            // 2. Wait for flap animation then fade out the whole screen
+
             setTimeout(() => {
                 screen.classList.add('fade-out');
 
-                // 3. Show main content and enable scrolling
+
                 main.classList.add('visible');
                 document.body.style.overflow = 'auto';
 
-                // 4. Ideally remove the intro from DOM after transition for performance
+
                 setTimeout(() => {
                     screen.style.display = 'none';
-                }, 800); // Matches CSS transition speed
+                }, 800);
             }, 600);
         }
     </script>
