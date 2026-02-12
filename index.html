@@ -23,14 +23,16 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
+            justify-content: space-around;
+            /* Better distribution */
             box-sizing: border-box;
-            padding: 40px 20px;
+            padding: 20px;
         }
 
         h1 {
             color: white;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
+            /* Slightly smaller for mobile */
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
             margin: 0;
             z-index: 10;
@@ -41,17 +43,18 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
-            margin-top: -30px;
-            /* Moves everything closer to title */
+            gap: 15px;
             z-index: 10;
+            width: 100%;
         }
 
         #image-container {
-            width: 350px;
-            height: 350px;
+            width: 250px;
+            /* Reduced from 350px */
+            height: 250px;
+            /* Reduced from 350px */
             background-color: white;
-            border-radius: 50px;
+            border-radius: 40px;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             display: flex;
@@ -66,7 +69,8 @@
         }
 
         #phrase-container {
-            height: 80px;
+            height: 60px;
+            /* Reduced */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -74,7 +78,8 @@
         }
 
         #phrase {
-            font-size: 1.6rem;
+            font-size: 1.3rem;
+            /* Slightly smaller */
             color: white;
             font-weight: bold;
             text-align: center;
@@ -85,17 +90,18 @@
         #controls {
             position: relative;
             width: 100%;
-            height: 300px;
+            height: 200px;
+            /* Reduced from 300px to keep it tighter */
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .btn {
-            padding: 15px 30px;
-            font-size: 18px;
+            padding: 12px 25px;
+            font-size: 16px;
             border: none;
-            border-radius: 15px;
+            border-radius: 12px;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -106,7 +112,6 @@
             background-color: var(--primary-pink);
             color: white;
             z-index: 50;
-            /* Lower than No button normally */
             position: absolute;
             transform-origin: center;
         }
@@ -115,7 +120,6 @@
             background-color: white;
             color: var(--primary-pink);
             z-index: 100;
-            /* Higher to be clickable even if overlapping */
             position: absolute;
         }
 
@@ -127,8 +131,10 @@
             justify-content: center;
             height: 100%;
             color: white;
-            font-size: 2rem;
+            font-size: 1.5rem;
             animation: fadeIn 1s;
+            padding: 20px;
+            text-align: center;
         }
 
         @keyframes fadeIn {
@@ -193,14 +199,17 @@
         function getRandomPosition() {
             const containerWidth = controls.clientWidth;
             const containerHeight = controls.clientHeight;
-            const btnWidth = noBtn.offsetWidth || 60;
-            const btnHeight = noBtn.offsetHeight || 40;
+            // Use actual button dimensions or defaults
+            const btnWidth = noBtn.offsetWidth || 85;
+            const btnHeight = noBtn.offsetHeight || 45;
 
-            const maxX = containerWidth - btnWidth;
-            const maxY = containerHeight - btnHeight;
+            // Padding to keep away from edges
+            const padding = 10;
+            const maxX = containerWidth - btnWidth - padding;
+            const maxY = containerHeight - btnHeight - padding;
 
-            const randomX = Math.random() * maxX;
-            const randomY = Math.random() * maxY;
+            const randomX = Math.max(padding, Math.random() * maxX);
+            const randomY = Math.max(padding, Math.random() * maxY);
 
             return { x: randomX, y: randomY };
         }
@@ -208,25 +217,33 @@
         function moveButton() {
             let pos;
             let attempts = 0;
-            const noWidth = noBtn.offsetWidth || 80;
-            const noHeight = noBtn.offsetHeight || 50;
+            const noWidth = noBtn.offsetWidth || 85;
+            const noHeight = noBtn.offsetHeight || 45;
 
             const yesRect = yesBtn.getBoundingClientRect();
             const ctrlRect = controls.getBoundingClientRect();
 
             do {
                 pos = getRandomPosition();
-                const candX = ctrlRect.left + pos.x;
-                const candY = ctrlRect.top + pos.y;
+                // Check relative position overlapping with yesBtn
+                // yesBtn is usually centered (left: ~50%, top: ~50%)
+                const candX = pos.x;
+                const candY = pos.y;
+
+                // Get yesBtn bounds relative to controls container
+                const yesLeft = yesRect.left - ctrlRect.left;
+                const yesTop = yesRect.top - ctrlRect.top;
+                const yesRight = yesLeft + yesRect.width;
+                const yesBottom = yesTop + yesRect.height;
 
                 const overlap = !(
-                    candX + noWidth < yesRect.left - 5 ||
-                    candX > yesRect.right + 5 ||
-                    candY + noHeight < yesRect.top - 5 ||
-                    candY > yesRect.bottom + 5
+                    candX + noWidth < yesLeft - 10 ||
+                    candX > yesRight + 10 ||
+                    candY + noHeight < yesTop - 10 ||
+                    candY > yesBottom + 10
                 );
 
-                if (!overlap || attempts >= 30) break;
+                if (!overlap || attempts >= 50) break;
                 attempts++;
             } while (true);
 
@@ -235,7 +252,7 @@
         }
 
         // Initialize position
-        moveButton();
+        setTimeout(moveButton, 100);
 
         const handleNoAction = () => {
             if (noClicks < 5) {
@@ -243,7 +260,8 @@
                 mainImage.src = images[noClicks];
                 noClicks++;
 
-                size += 0.7;
+                // Reduced scale increment from 0.7 to 0.4 for mobile
+                size += 0.4;
                 yesBtn.style.transform = `scale(${size})`;
                 moveButton();
             } else if (noClicks === 5) {
@@ -279,9 +297,9 @@
             document.body.style.padding = "0";
             document.body.innerHTML = `
                 <div class="celebration" style="width: 100vw; height: 100vh;">
-                    <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Sabia que Siiiiiiiiiiiii❤️</h1>
-                    <img src="fin.jpg" style="border-radius: 45px; width: 75vw; max-width: 450px; aspect-ratio: 1/1; object-fit: cover; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-                    <div style="font-size: 5rem; margin-top: 20px;">🥰</div>
+                    <h1 style="font-size: 2rem; margin-bottom: 20px;">Sabia que Siiiiiiiiiiiii❤️</h1>
+                    <img src="fin.jpg" style="border-radius: 40px; width: 80vw; max-width: 320px; aspect-ratio: 1/1; object-fit: cover; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                    <div style="font-size: 4rem; margin-top: 15px;">🥰</div>
                 </div>
             `;
             document.body.style.background = "linear-gradient(135deg, #ff4d6d, #ff758c)";
