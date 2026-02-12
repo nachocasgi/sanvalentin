@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>¿Quieres ser mi San Valentín?</title>
+    <style>
+        :root {
+            --primary-pink: #ff4d6d;
+            --soft-pink: #ff9a9e;
+            --peach: #fad0c4;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            background: linear-gradient(135deg, var(--soft-pink), var(--peach));
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            box-sizing: border-box;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            color: white;
+            font-size: 1.8rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 0;
+            z-index: 10;
+            text-align: center;
+        }
+
+        #content-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-top: -30px;
+            /* Moves everything closer to title */
+            z-index: 10;
+        }
+
+        #image-container {
+            width: 350px;
+            height: 350px;
+            background-color: white;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #phrase-container {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        #phrase {
+            font-size: 1.6rem;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            transition: opacity 0.3s;
+            padding: 0 10px;
+        }
+
+        #controls {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #yesBtn {
+            background-color: var(--primary-pink);
+            color: white;
+            z-index: 50;
+            /* Lower than No button normally */
+            position: absolute;
+            transform-origin: center;
+        }
+
+        #noBtn {
+            background-color: white;
+            color: var(--primary-pink);
+            z-index: 100;
+            /* Higher to be clickable even if overlapping */
+            position: absolute;
+        }
+
+        /* Final Screen Styles */
+        .celebration {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: white;
+            font-size: 2rem;
+            animation: fadeIn 1s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>¿Queres ser mi San Valentín? 💘</h1>
+
+    <div id="content-area">
+        <div id="image-container">
+            <img id="main-image" src="kyp.jpg" alt="Valentín">
+        </div>
+        <div id="phrase-container">
+            <div id="phrase"></div>
+        </div>
+    </div>
+
+    <div id="controls">
+        <button id="yesBtn" class="btn">Sí ❤️</button>
+        <button id="noBtn" class="btn">No 😢</button>
+    </div>
+
+    <script>
+        const yesBtn = document.getElementById("yesBtn");
+        const noBtn = document.getElementById("noBtn");
+        const phrase = document.getElementById("phrase");
+        const mainImage = document.getElementById("main-image");
+        const controls = document.getElementById("controls");
+
+        let size = 1;
+        let noClicks = 0;
+
+        const phrases = [
+            "No seas mala 😭",
+            "Dale, veniiiii💔",
+            "Quien me va a cuidarrrrrr 😔",
+            "Te prometo no te hago nadaaaaaaa 🥺",
+            "Por favor, te lo pido 🙏"
+        ];
+
+        // Usando la imagen local proporcionada
+        const images = [
+            "1.jpg",
+            "2.jpg",
+            "3.jpg",
+            "4.jpeg",
+            "5.jpg"
+        ];
+
+        function getRandomPosition() {
+            const containerWidth = controls.clientWidth;
+            const containerHeight = controls.clientHeight;
+            const btnWidth = noBtn.offsetWidth || 60;
+            const btnHeight = noBtn.offsetHeight || 40;
+
+            const maxX = containerWidth - btnWidth;
+            const maxY = containerHeight - btnHeight;
+
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+
+            return { x: randomX, y: randomY };
+        }
+
+        function moveButton() {
+            let pos;
+            let attempts = 0;
+            const noWidth = noBtn.offsetWidth || 80;
+            const noHeight = noBtn.offsetHeight || 50;
+
+            const yesRect = yesBtn.getBoundingClientRect();
+            const ctrlRect = controls.getBoundingClientRect();
+
+            do {
+                pos = getRandomPosition();
+                const candX = ctrlRect.left + pos.x;
+                const candY = ctrlRect.top + pos.y;
+
+                const overlap = !(
+                    candX + noWidth < yesRect.left - 5 ||
+                    candX > yesRect.right + 5 ||
+                    candY + noHeight < yesRect.top - 5 ||
+                    candY > yesRect.bottom + 5
+                );
+
+                if (!overlap || attempts >= 30) break;
+                attempts++;
+            } while (true);
+
+            noBtn.style.left = pos.x + "px";
+            noBtn.style.top = pos.y + "px";
+        }
+
+        // Initialize position
+        moveButton();
+
+        const handleNoAction = () => {
+            if (noClicks < 5) {
+                phrase.textContent = phrases[noClicks];
+                mainImage.src = images[noClicks];
+                noClicks++;
+
+                size += 0.7;
+                yesBtn.style.transform = `scale(${size})`;
+                moveButton();
+            } else if (noClicks === 5) {
+                setTimeout(() => {
+                    noBtn.style.display = "none";
+                    phrase.textContent = "Bueno… ya está, solo queda el Sí 😎❤️";
+                    mainImage.src = "70d976d5b2aa41d5b6fbcb4575b8c2a8.jpg";
+
+                    Object.assign(yesBtn.style, {
+                        position: 'fixed',
+                        top: '0',
+                        left: '0',
+                        width: '100vw',
+                        height: '100vh',
+                        margin: '0',
+                        transform: 'none',
+                        borderRadius: '0',
+                        fontSize: '3rem',
+                        zIndex: '1000',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    });
+                }, 300);
+            }
+        };
+
+        noBtn.addEventListener("click", (e) => {
+            handleNoAction();
+        });
+
+        yesBtn.addEventListener("click", () => {
+            document.body.style.padding = "0";
+            document.body.innerHTML = `
+                <div class="celebration" style="width: 100vw; height: 100vh;">
+                    <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Sabia que Siiiiiiiiiiiii❤️</h1>
+                    <img src="fin.jpg" style="border-radius: 45px; width: 75vw; max-width: 450px; aspect-ratio: 1/1; object-fit: cover; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                    <div style="font-size: 5rem; margin-top: 20px;">🥰</div>
+                </div>
+            `;
+            document.body.style.background = "linear-gradient(135deg, #ff4d6d, #ff758c)";
+        });
+    </script>
+
+</body>
+
+</html>
